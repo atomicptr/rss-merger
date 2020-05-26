@@ -25,7 +25,8 @@ seems to be overkill). Default is [your configuration directory](https://golang.
 
 ## Tech
 
-The backend is built in Go mostly powered by Echo.
+* The backend is built in Go mostly powered by Echo.
+* The frontend is built in ClojureScript with Reagent (React).
 
 ## License
 

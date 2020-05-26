@@ -1,0 +1,11 @@
+{
+  "name": "rss-merger",
+  "version": "1.0.0",
+  "description": "Simple tool to merge several RSS feeds into one.",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  }
+}
