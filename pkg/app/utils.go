@@ -12,7 +12,7 @@ func getEnv(varName, defaultValue string) string {
 	if env == "" {
 		return defaultValue
 	}
-	return varName
+	return env
 }
 
 func getEnvAsInt(varName string, defaultValue int) int {

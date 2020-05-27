@@ -1,8 +1,8 @@
 ;; shadow-cljs configuration
 {:source-paths ["src"]
  :dependencies [[reagent "0.10.0"]]
- :dev-http {8080 "../dist/"}
- :builds {:app {:output-dir "../dist/"
+ :dev-http {8080 "../public/"}
+ :builds {:app {:output-dir "../public/"
                 :asset-path "."
                 :target :browser
                 :modules {:main {:init-fn app.main/main!}}

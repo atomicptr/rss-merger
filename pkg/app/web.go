@@ -37,13 +37,13 @@ func runApi(username, password string, port int) error {
 	e.POST("/feeds/:identifier/add-link", postAddLink)
 	e.GET("/rss/:identifier", getRssFeed)
 
-	e.Static("/", "dist")
+	e.Static("/", "public")
 
 	return e.Start(fmt.Sprintf(":%d", port))
 }
 
 func serveFrontend(context echo.Context) error {
-	return context.File("dist/index.html")
+	return context.File("public/index.html")
 }
 
 func errorHandler(err error, context echo.Context) {
