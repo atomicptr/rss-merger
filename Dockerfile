@@ -1,4 +1,4 @@
-FROM alpine:3.11 as gobase
+FROM alpine:3.12 as gobase
 
 RUN apk add --no-cache build-base go git
 
@@ -7,7 +7,7 @@ WORKDIR /app
 
 RUN CGO_ENABLED=0 go build -o rss-merger -ldflags '-w -extldflags "-static"' cmd/rss-merger/main.go
 
-FROM alpine:3.11 as webbase
+FROM alpine:3.12 as webbase
 
 RUN apk add --no-cache nodejs yarn openjdk11
 
@@ -16,7 +16,7 @@ WORKDIR /app/web
 
 RUN yarn && yarn build
 
-FROM scratch
+FROM alpine:3.12
 
 ENV RSS_MERGER_STORAGEDIR "/data"
 ENV RSS_MERGER_PORT 8081
