@@ -9,8 +9,9 @@ import (
 type Storage map[string]Feed
 
 type Feed struct {
-	Title string   `json:"title"`
-	Links []string `json:"links"`
+	Identifier string   `json:"identifier"`
+	Title      string   `json:"title"`
+	Links      []string `json:"links"`
 }
 
 func Save(path string, feeds Storage) error {

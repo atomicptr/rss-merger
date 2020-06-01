@@ -1,10 +1,13 @@
 package app
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/atomicptr/rss-merger/pkg/feed"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -35,6 +38,7 @@ func runApi(username, password string, port int) error {
 	e.GET("/feeds/:identifier", getFeedByIdentifier)
 	e.DELETE("/feeds/:identifier", deleteFeed)
 	e.POST("/feeds/:identifier/add-link", postAddLink)
+	e.POST("/feeds/:identifier/delete-link", postDeleteLink)
 	e.GET("/rss/:identifier", getRssFeed)
 
 	e.Static("/", "public")
@@ -54,7 +58,10 @@ func errorHandler(err error, context echo.Context) {
 
 	// push all requests that couldn't be found to the frontend
 	if code == http.StatusNotFound {
-		_ = serveFrontend(context)
+		err = serveFrontend(context)
+		if err != nil {
+			log.Println(err)
+		}
 		return
 	}
 
@@ -66,13 +73,23 @@ func getFeeds(context echo.Context) error {
 }
 
 func postNewFeed(context echo.Context) error {
-	var f feed.Feed
-	err := context.Bind(&f)
+	body, err := ioutil.ReadAll(context.Request().Body)
 	if err != nil {
 		return err
 	}
 
+	var f feed.Feed
+	err = json.Unmarshal(body, &f)
+	if err != nil {
+		return err
+	}
+
+	if f.Title == "" {
+		return errors.New("no title found")
+	}
+
 	identifier := createIdentifierFromTitle(f.Title)
+	f.Identifier = identifier
 	feedStorage[identifier] = f
 	err = saveStorage(storageDir)
 	if err != nil {
@@ -110,14 +127,14 @@ func postAddLink(context echo.Context) error {
 	identifier := context.Param("identifier")
 	f, ok := feedStorage[identifier]
 	if !ok {
-		return context.JSON(http.StatusNotFound, "not found")
+		return context.JSON(http.StatusBadRequest, "not found")
 	}
 
-	var link string
-	err := context.Bind(&link)
+	body, err := ioutil.ReadAll(context.Request().Body)
 	if err != nil {
 		return err
 	}
+	link := string(body)
 	if link == "" {
 		return context.JSON(http.StatusBadRequest, "no link found")
 	}
@@ -127,6 +144,37 @@ func postAddLink(context echo.Context) error {
 	}
 
 	f.Links = append(f.Links, link)
+	feedStorage[identifier] = f
+	return saveStorage(storageDir)
+}
+
+func postDeleteLink(context echo.Context) error {
+	identifier := context.Param("identifier")
+	f, ok := feedStorage[identifier]
+	if !ok {
+		return context.JSON(http.StatusBadRequest, "not found")
+	}
+
+	body, err := ioutil.ReadAll(context.Request().Body)
+	if err != nil {
+		return err
+	}
+	link := string(body)
+
+	linkIndex := -1
+
+	for index, l := range f.Links {
+		if l == link {
+			linkIndex = index
+			break
+		}
+	}
+
+	if linkIndex == -1 {
+		return errors.New("unknown link supplied")
+	}
+
+	f.Links = append(f.Links[:linkIndex], f.Links[linkIndex+1:]...)
 	feedStorage[identifier] = f
 	return saveStorage(storageDir)
 }
@@ -152,7 +200,7 @@ func simpleLoggerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 			message = err.Error()
 		}
 
-		log.Printf("%d - %s %s\n", res.Status, req.URL.String(), message)
+		log.Printf("%d - %s %s %s\n", res.Status, req.Method, req.URL.String(), message)
 		return nil
 	}
 }

@@ -5,6 +5,9 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "react": "16.13.0",
     "react-dom": "16.13.0"
   },
@@ -12,7 +15,7 @@
     "shadow-cljs": "^2.9.10"
   },
   "scripts": {
-    "watch": "shadow-cljs watch app",
+    "dev": "shadow-cljs watch app",
     "build": "shadow-cljs release app"
   }
 }

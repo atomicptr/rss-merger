@@ -1,0 +1,15 @@
+.body {
+    margin-top: 40px;
+}
+
+.navbar-item .icon {
+    margin-right: 5px;
+}
+
+.feed-list span.icon svg {
+    margin-right: 5px;
+}
+
+.w100 {
+    width: 100%;
+}

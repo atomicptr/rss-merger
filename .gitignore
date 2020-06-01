@@ -1,6 +1,4 @@
-/public/main.js
-/public/manifest.edn
-/public/cljs-runtime
+/public/js
 /web/.shadow-cljs
 /web/node_modules
 

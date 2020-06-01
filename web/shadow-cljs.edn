@@ -1,9 +1,14 @@
 ;; shadow-cljs configuration
 {:source-paths ["src"]
- :dependencies [[reagent "0.10.0"]]
- :dev-http {8080 "../public/"}
- :builds {:app {:output-dir "../public/"
-                :asset-path "."
-                :target :browser
-                :modules {:main {:init-fn app.main/main!}}
-                :devtools {:after-load app.main/reload!}}}}
+ :dependencies [[reagent "0.10.0"]
+                [cljs-ajax "0.8.0"]
+                [bidi "2.1.6"]
+                [kibu/pushy "0.3.8"]]
+ :dev-http     {8080 "../public/"}
+ :nrepl        {:port 53333}
+ :builds       {:app {:output-dir       "../public/js"
+                      :asset-path       "/js"
+                      :target           :browser
+                      :modules          {:main {:init-fn app.core/main!}}
+                      :devtools         {:after-load app.core/reload!}
+                      :compiler-options {:shadow-keywords true}}}}
