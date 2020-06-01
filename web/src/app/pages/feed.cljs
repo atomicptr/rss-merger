@@ -1,6 +1,5 @@
 (ns app.pages.feed
-  (:require [app.helper :as helper]
-            [app.router :as router]
+  (:require [app.router :as router]
             [reagent.core :as r]
             [ajax.core :refer [POST]]))
 
