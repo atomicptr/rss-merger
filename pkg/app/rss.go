@@ -12,8 +12,12 @@ import (
 	"time"
 )
 
+func buildCacheIdentifier(identifier string) string {
+	return fmt.Sprintf("rss:%s", identifier)
+}
+
 func createMergedFeed(identifier string) (interface{}, error) {
-	cacheIdentifier := fmt.Sprintf("rss:%s", identifier)
+	cacheIdentifier := buildCacheIdentifier(identifier)
 	content, ok := appCache.Get(cacheIdentifier)
 	if ok {
 		return content, nil

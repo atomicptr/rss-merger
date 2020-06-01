@@ -120,6 +120,8 @@ func deleteFeed(context echo.Context) error {
 	if err != nil {
 		return err
 	}
+	// invalidate cache
+	appCache.Delete(buildCacheIdentifier(identifier))
 	return context.JSON(http.StatusOK, "ok")
 }
 
@@ -145,6 +147,9 @@ func postAddLink(context echo.Context) error {
 
 	f.Links = append(f.Links, link)
 	feedStorage[identifier] = f
+
+	// invalidate cache
+	appCache.Delete(buildCacheIdentifier(identifier))
 	return saveStorage(storageDir)
 }
 
@@ -176,6 +181,9 @@ func postDeleteLink(context echo.Context) error {
 
 	f.Links = append(f.Links[:linkIndex], f.Links[linkIndex+1:]...)
 	feedStorage[identifier] = f
+
+	// invalidate cache
+	appCache.Delete(buildCacheIdentifier(identifier))
 	return saveStorage(storageDir)
 }
 

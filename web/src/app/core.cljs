@@ -25,3 +25,6 @@
 (defn main! [] (init))
 
 (defn reload! [] (init))
+
+; update feed once every minute
+(defonce updater (js/setInterval (state/update-feeds!) 60000))
