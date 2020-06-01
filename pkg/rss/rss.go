@@ -1,12 +1,13 @@
 package rss
 
 type Rss struct {
-	XMLName string `xml:"rss"`
-	Version string `xml:"version,attr"`
-	Channel `xml:"channel"`
+	XMLName string  `xml:"rss"`
+	Version string  `xml:"version,attr"`
+	Channel Channel `xml:"channel"`
 }
 
 type Channel struct {
+	XMLName       string `xml:"channel"`
 	Title         string `xml:"title"`
 	Description   string `xml:"description"`
 	Link          string `xml:"link,omitempty"`

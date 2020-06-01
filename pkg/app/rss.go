@@ -61,7 +61,7 @@ func createMergedFeed(identifier string) (interface{}, error) {
 				PubDate: parsedFeedItem.Published,
 			}
 
-			newFeed.Item = append(newFeed.Item, item)
+			newFeed.Channel.Item = append(newFeed.Channel.Item, item)
 		}
 	}
 
